@@ -1,0 +1,41 @@
+{
+  "name": "recycling-system",
+  "version": "1.0.0",
+  "description": "Sistema de Gestion de reciclaje de vidrio",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "migrate": "node database/sql/migrate.js",
+    "test:connections": "node tests/test_connections.js",
+    "db:init-mongo": "node database/mongodb/init_mongodb.js",
+    "db:migrate": "psql -U $POSTGRES_USER -d $POSTGRES_DB -h $POSTGRES_HOST -f database/sql/migrations/001_initial_schema.sql",
+    "db:seed": "psql -U $POSTGRES_USER -d $POSTGRES_DB -h $POSTGRES_HOST -f database/sql/seeds/001_initial_data.sql"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.26.2",
+  "dependencies": {
+    "bull": "^4.16.5",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.1",
+    "helmet": "^8.1.0",
+    "joi": "^18.0.2",
+    "mongodb": "^7.0.0",
+    "morgan": "^1.10.1",
+    "pg": "^8.16.3",
+    "redis": "^5.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.2",
+    "jest": "^30.2.0",
+    "node-pg-migrate": "^8.0.4",
+    "nodemon": "^3.1.11",
+    "supertest": "^7.1.4"
+  }
+}
