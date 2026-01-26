@@ -11,6 +11,10 @@ const morgan = require('morgan');
 // Rutas
 const eventRoutes = require('./routes/eventRoutes');
 const binRoutes = require('./routes/binRoutes');
+const requestRoutes = require('./routes/requestRoutes');
+const reportRoutes = require('./routes/reportRoutes');
+const routeRoutes = require('./routes/routeRoutes');
+const collectionRoutes = require('./routes/collectionRoutes');
 
 // Middleware
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
@@ -68,6 +72,10 @@ app.get('/health', async (req, res) => {
 // Rutas de la API
 app.use('/api/events', eventRoutes);
 app.use('/api/bins', binRoutes);
+app.use('/api/requests', requestRoutes);         // Fase 3.1
+app.use('/api/reports', reportRoutes);           // Fase 3.1
+app.use('/api/routes', routeRoutes);             // Fase 3.2
+app.use('/api/collection', collectionRoutes);    // Fase 3.3
 
 // Ruta raíz
 app.get('/', (req, res) => {
@@ -77,7 +85,11 @@ app.get('/', (req, res) => {
         endpoints: {
             health: '/health',
             events: '/api/events',
-            bins: '/api/bins'
+            bins: '/api/bins',
+            requests: '/api/requests',
+            reports: '/api/reports',
+            routes: '/api/routes',
+            collection: '/api/collection'
         }
     });
 });

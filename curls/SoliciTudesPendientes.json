@@ -1,0 +1,42 @@
+{
+    "success": true,
+    "message": "Operación exitosa",
+    "data": {
+        "solicitudes": [
+            {
+                "id": "3ee4f101-aca7-48a0-87aa-7ba6ce2662c4",
+                "establecimiento_id": "119ce3c7-4f2f-4ca3-bf5b-b544eaf06df0",
+                "solicitante_id": "6459a369-62bc-4ba1-8554-b930737b3ff3",
+                "aprobador_id": null,
+                "tipo": "instalacion",
+                "status": "pendiente",
+                "descripcion": "Solicito la instalación de 2 botes de 50L",
+                "datos_adicionales": {
+                    "cantidad": 2,
+                    "capacidad": "50L"
+                },
+                "bote_id": null,
+                "respuesta_admin": null,
+                "created_at": "2026-01-09T00:30:21.924Z",
+                "updated_at": "2026-01-09T00:30:21.924Z",
+                "aprobada_at": null,
+                "completada_at": null,
+                "establecimiento_nombre": "Restaurante Demo",
+                "establecimiento_direccion": "Calle Principal 123",
+                "solicitante_nombre": "Administrador",
+                "solicitante_apellido": "Sistema",
+                "aprobador_nombre": null,
+                "aprobador_apellido": null,
+                "bote_hardware_id": null,
+                "bote_porcentaje": null
+            }
+        ],
+        "pagination": {
+            "total": 1,
+            "limit": 100,
+            "offset": 0,
+            "hasMore": false
+        }
+    },
+    "timestamp": "2026-01-09T00:49:39.671Z"
+}

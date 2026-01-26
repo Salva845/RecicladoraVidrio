@@ -1,0 +1,37 @@
+{
+    "success": true,
+    "message": "Operación exitosa",
+    "data": {
+        "rutas": [
+            {
+                "id": "21dc60de-7913-4ba8-bbc2-314c8edebbe4",
+                "sector_id": "30bd7d80-ab3c-4bbe-9f6e-ae13d8b76a3a",
+                "creador_id": "6459a369-62bc-4ba1-8554-b930737b3ff3",
+                "recolector_asignado_id": null,
+                "nombre": "Ruta PROVATORIO - 2026-01-09",
+                "descripcion": "Ruta generada automáticamente con 1 puntos",
+                "status": "planificada",
+                "fecha_planificada": "2024-01-15T06:00:00.000Z",
+                "hora_inicio": null,
+                "hora_fin": null,
+                "total_puntos": 1,
+                "puntos_completados": 0,
+                "created_at": "2026-01-09T00:53:21.515Z",
+                "updated_at": "2026-01-09T00:53:21.515Z",
+                "iniciada_at": null,
+                "completada_at": null,
+                "sector_nombre": "Sector alternativo",
+                "sector_codigo": "PROVATORIO",
+                "creador_nombre": "Administrador",
+                "recolector_nombre": null
+            }
+        ],
+        "pagination": {
+            "total": 1,
+            "limit": 100,
+            "offset": 0,
+            "hasMore": false
+        }
+    },
+    "timestamp": "2026-01-09T00:53:37.548Z"
+}

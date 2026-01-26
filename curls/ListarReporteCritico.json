@@ -1,0 +1,27 @@
+{
+    "success": true,
+    "message": "Operación exitosa",
+    "data": {
+        "reportes": [
+            {
+                "id": "2a6f43ed-1c86-4c85-81b8-dd04ad58b10c",
+                "bote_id": "f865be09-6c45-4aa5-a750-59bb1e54c0aa",
+                "reportero_id": "6459a369-62bc-4ba1-8554-b930737b3ff3",
+                "atendido_por_id": null,
+                "tipo": "dano_fisico",
+                "status": "pendiente",
+                "titulo": "Tapa rota",
+                "descripcion": "La tapa del bote está rota y no cierra correctamente",
+                "imagenes_urls": null,
+                "resolucion": null,
+                "created_at": "2026-01-09T00:46:42.082Z",
+                "updated_at": "2026-01-09T00:46:42.082Z",
+                "atendido_at": null,
+                "bote_hardware_id": "BIN_DEMO_001",
+                "establecimiento_nombre": "Restaurante Demo",
+                "establecimiento_direccion": "Calle Principal 123"
+            }
+        ]
+    },
+    "timestamp": "2026-01-09T00:51:19.199Z"
+}
