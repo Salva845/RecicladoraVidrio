@@ -15,6 +15,9 @@ const { UserRole } = require('../models/enums');
 
 const router = express.Router();
 
+// Todas las rutas requieren autenticación
+router.use(authenticate);
+
 /**
  * POST /api/requests
  * Crear nueva solicitud - Solo dueño de establecimiento
