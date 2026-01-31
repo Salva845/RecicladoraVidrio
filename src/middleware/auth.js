@@ -96,6 +96,7 @@ async function requireEstablecimientoOwnership(req, res, next) {
         }
 
         const establecimientoId = req.params.establecimientoId ||
+            req.params.id ||
             req.body.establecimiento_id ||
             req.query.establecimiento_id;
 

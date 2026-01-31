@@ -16,6 +16,7 @@ const requestRoutes = require('./routes/requestRoutes');
 const reportRoutes = require('./routes/reportRoutes');
 const routeRoutes = require('./routes/routeRoutes');
 const collectionRoutes = require('./routes/collectionRoutes');
+const establecimientoRoutes = require('./routes/establecimientoRoutes');
 
 // Middleware
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
@@ -78,6 +79,7 @@ app.use('/api/requests', requestRoutes);         // Fase 3.1
 app.use('/api/reports', reportRoutes);           // Fase 3.1
 app.use('/api/routes', routeRoutes);             // Fase 3.2
 app.use('/api/collection', collectionRoutes);    // Fase 3.3
+app.use('/api/establecimientos', establecimientoRoutes);
 
 // Ruta raíz
 app.get('/', (req, res) => {
@@ -92,7 +94,8 @@ app.get('/', (req, res) => {
             requests: '/api/requests',
             reports: '/api/reports',
             routes: '/api/routes',
-            collection: '/api/collection'
+            collection: '/api/collection',
+            establecimientos: '/api/establecimientos'
         }
     });
 });
