@@ -12,7 +12,8 @@
     "test:connections": "node tests/test_connections.js",
     "db:init-mongo": "node database/mongodb/init_mongodb.js",
     "db:migrate": "psql -U $POSTGRES_USER -d $POSTGRES_DB -h $POSTGRES_HOST -f database/sql/migrations/001_initial_schema.sql",
-    "db:seed": "psql -U $POSTGRES_USER -d $POSTGRES_DB -h $POSTGRES_HOST -f database/sql/seeds/001_initial_data.sql"
+    "db:seed": "psql -U $POSTGRES_USER -d $POSTGRES_DB -h $POSTGRES_HOST -f database/sql/seeds/001_initial_data.sql",
+    "test:endpoints": "node tests/all-endpoints.js"
   },
   "keywords": [],
   "author": "",
