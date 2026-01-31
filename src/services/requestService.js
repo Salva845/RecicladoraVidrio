@@ -175,7 +175,8 @@ class RequestService {
                 await statusService.markAsPendingRetirement(
                     solicitud.bote_id,
                     requestId,
-                    approverId
+                    approverId,
+                    { pgClient }
                 );
             }
 

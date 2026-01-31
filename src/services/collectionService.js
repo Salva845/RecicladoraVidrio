@@ -146,7 +146,7 @@ class CollectionService {
             }
 
             // Marcar bote como retirado
-            await statusService.confirmCollection(boteId, recolectorId);
+            await statusService.confirmCollection(boteId, recolectorId, { pgClient });
 
             // Buscar y completar solicitud de retiro asociada
             const solicitudQuery = `
