@@ -344,15 +344,17 @@ class ReportService {
             const query = `
                 SELECT 
                     COUNT(*) as total,
-                    COUNT(*) FILTER (WHERE r.status = 'pendiente') as pendientes,
-                    COUNT(*) FILTER (WHERE r.status = 'aprobada') as en_atencion,
-                    COUNT(*) FILTER (WHERE r.status = 'completada') as completados,
-                    COUNT(*) FILTER (WHERE r.tipo = 'dano_fisico') as danos_fisicos,
-                    COUNT(*) FILTER (WHERE r.tipo = 'sensor_falla') as fallas_sensor,
-                    COUNT(*) FILTER (WHERE r.tipo = 'vandalismo') as vandalismos,
-                    COUNT(*) FILTER (WHERE r.tipo = 'otro') as otros,
-                    AVG(EXTRACT(EPOCH FROM (r.atendido_at - r.created_at))/3600)::NUMERIC(10,2) 
-                        FILTER (WHERE r.atendido_at IS NOT NULL) as tiempo_promedio_atencion_horas
+                    SUM(CASE WHEN r.status = 'pendiente' THEN 1 ELSE 0 END) as pendientes,
+                    SUM(CASE WHEN r.status = 'aprobada' THEN 1 ELSE 0 END) as en_atencion,
+                    SUM(CASE WHEN r.status = 'completada' THEN 1 ELSE 0 END) as completados,
+                    SUM(CASE WHEN r.tipo = 'dano_fisico' THEN 1 ELSE 0 END) as danos_fisicos,
+                    SUM(CASE WHEN r.tipo = 'sensor_falla' THEN 1 ELSE 0 END) as fallas_sensor,
+                    SUM(CASE WHEN r.tipo = 'vandalismo' THEN 1 ELSE 0 END) as vandalismos,
+                    SUM(CASE WHEN r.tipo = 'otro' THEN 1 ELSE 0 END) as otros,
+                    AVG(CASE WHEN r.atendido_at IS NOT NULL
+                        THEN EXTRACT(EPOCH FROM (r.atendido_at - r.created_at)) / 3600
+                        ELSE NULL
+                    END)::NUMERIC(10,2) as tiempo_promedio_atencion_horas
                 FROM reportes r
                 WHERE ${conditions.join(' AND ')}
             `;
