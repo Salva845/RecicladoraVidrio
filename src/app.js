@@ -9,6 +9,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 
 // Rutas
+const authRoutes = require('./routes/authRoutes');
 const eventRoutes = require('./routes/eventRoutes');
 const binRoutes = require('./routes/binRoutes');
 const requestRoutes = require('./routes/requestRoutes');
@@ -70,6 +71,7 @@ app.get('/health', async (req, res) => {
 });
 
 // Rutas de la API
+app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/bins', binRoutes);
 app.use('/api/requests', requestRoutes);         // Fase 3.1
@@ -84,6 +86,7 @@ app.get('/', (req, res) => {
         version: '1.0.0',
         endpoints: {
             health: '/health',
+            auth: '/api/auth',
             events: '/api/events',
             bins: '/api/bins',
             requests: '/api/requests',

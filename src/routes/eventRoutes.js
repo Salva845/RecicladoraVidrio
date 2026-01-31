@@ -4,6 +4,7 @@
 
 const express = require('express');
 const eventController = require('../controllers/eventController');
+const { authenticate, optionalAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -11,8 +12,14 @@ const router = express.Router();
  * POST /api/events
  * Endpoint para recibir eventos del hardware
  * Body: { hardware_id, porcentaje_llenado, tipo_vidrio?, nivel_bateria?, ... }
+ * SIN AUTENTICACIÓN - Hardware envia eventos directamente
  */
 router.post('/', eventController.receiveEvent.bind(eventController));
+
+
+// Las siguientes rutas requieren autenticación
+router.use(authenticate)
+
 
 /**
  * GET /api/events/bin/:hardwareId
