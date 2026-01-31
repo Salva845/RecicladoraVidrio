@@ -7,7 +7,7 @@ const { getPostgresConnection } = require('../config/database');
 const { userSchema } = require('../models/validators');
 const { UserRole } = require('../models/enums');
 const { ValidationError, NotFoundError, UnauthorizedError } = require('../middleware/errorHandler');
-const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 
 class AuthService {
     /**
@@ -234,7 +234,7 @@ class AuthService {
      */
     async verifyToken(token) {
         try {
-            const decoded = this._decodeToken(token);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
             // Verificar que el usuario aún existe y está activo
             const user = await this.getUserById(decoded.userId);
@@ -389,61 +389,17 @@ class AuthService {
     }
 
     /**
-     * Generar token de sesión (JWT simple)
+     * Generar token de sesión (JWT)
      */
     _generateToken(userId, telegramId, role) {
-        const payload = {
-            userId,
-            telegramId,
-            role,
-            iat: Date.now(),
-            exp: Date.now() + (7 * 24 * 60 * 60 * 1000) // 7 días
-        };
-
-        const secret = process.env.JWT_SECRET || 'default-secret-change-in-production';
-        const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64');
-        const body = Buffer.from(JSON.stringify(payload)).toString('base64');
-
-        const signature = crypto
-            .createHmac('sha256', secret)
-            .update(`${header}.${body}`)
-            .digest('base64');
-
-        return `${header}.${body}.${signature}`;
+        return jwt.sign(
+            { userId, telegramId, role },
+            process.env.JWT_SECRET,
+            { expiresIn: '7d' }
+        );
     }
 
-    /**
-     * Decodificar token
-     */
-    _decodeToken(token) {
-        const parts = token.split('.');
-        if (parts.length !== 3) {
-            throw new Error('Token inválido');
-        }
 
-        const secret = process.env.JWT_SECRET || 'default-secret-change-in-production';
-        const [header, body, signature] = parts;
-
-        // Verificar firma
-        const expectedSignature = crypto
-            .createHmac('sha256', secret)
-            .update(`${header}.${body}`)
-            .digest('base64');
-
-        if (signature !== expectedSignature) {
-            throw new Error('Firma de token inválida');
-        }
-
-        // Decodificar payload
-        const payload = JSON.parse(Buffer.from(body, 'base64').toString());
-
-        // Verificar expiración
-        if (payload.exp && payload.exp < Date.now()) {
-            throw new Error('Token expirado');
-        }
-
-        return payload;
-    }
 
     /**
      * Sanitizar datos de usuario (remover campos sensibles)

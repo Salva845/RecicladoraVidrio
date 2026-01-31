@@ -12,6 +12,12 @@ let server;
 
 async function startServer() {
     try {
+        // Validar variables de entorno críticas
+        if (!process.env.JWT_SECRET) {
+            console.error('❌ FATAL: JWT_SECRET no está definido en las variables de entorno');
+            process.exit(1);
+        }
+
         // Inicializar aplicación
         await initializeApp();
 
