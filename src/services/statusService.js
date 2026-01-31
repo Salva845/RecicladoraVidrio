@@ -11,11 +11,15 @@ class StatusService {
     /**
      * Cambiar estado de un bote con validación de transiciones
      */
-    async changeStatus(boteId, nuevoEstado, usuarioId = null, motivo = null) {
-        const pgClient = await getPostgresConnection();
+    async changeStatus(boteId, nuevoEstado, usuarioId = null, motivo = null, options = {}) {
+        const { pgClient: externalClient = null } = options;
+        const pgClient = externalClient || await getPostgresConnection();
+        const manageTransaction = !externalClient;
 
         try {
-            await pgClient.query('BEGIN');
+            if (manageTransaction) {
+                await pgClient.query('BEGIN');
+            }
 
             // Obtener estado actual
             const getBoteQuery = `
@@ -48,7 +52,7 @@ class StatusService {
             `;
             const updateResult = await pgClient.query(updateQuery, [nuevoEstado, boteId]);
 
-            // Registrar en historial (el trigger lo hace automáticamente, pero agregamos contexto)
+            // Registrar en historial con contexto de usuario
             const historialQuery = `
                 INSERT INTO historial_estados_bote (
                     bote_id,
@@ -69,15 +73,21 @@ class StatusService {
                 motivo || this._getDefaultMotivo(nuevoEstado)
             ]);
 
-            await pgClient.query('COMMIT');
+            if (manageTransaction) {
+                await pgClient.query('COMMIT');
+            }
 
             return updateResult.rows[0];
 
         } catch (error) {
-            await pgClient.query('ROLLBACK');
+            if (manageTransaction) {
+                await pgClient.query('ROLLBACK');
+            }
             throw error;
         } finally {
-            pgClient.release();
+            if (manageTransaction) {
+                pgClient.release();
+            }
         }
     }
 
@@ -85,11 +95,15 @@ class StatusService {
      * Marcar bote como pendiente de retiro
      * Solo puede hacerse si hay una solicitud aprobada
      */
-    async markAsPendingRetirement(boteId, solicitudId, usuarioId) {
-        const pgClient = await getPostgresConnection();
+    async markAsPendingRetirement(boteId, solicitudId, usuarioId, options = {}) {
+        const { pgClient: externalClient = null } = options;
+        const pgClient = externalClient || await getPostgresConnection();
+        const manageTransaction = !externalClient;
 
         try {
-            await pgClient.query('BEGIN');
+            if (manageTransaction) {
+                await pgClient.query('BEGIN');
+            }
 
             // Verificar que existe solicitud aprobada
             const solicitudQuery = `
@@ -112,41 +126,50 @@ class StatusService {
                 boteId,
                 BinStatus.PENDIENTE_RETIRO,
                 usuarioId,
-                `Solicitud de retiro aprobada: ${solicitudId}`
+                `Solicitud de retiro aprobada: ${solicitudId}`,
+                { pgClient }
             );
 
-            await pgClient.query('COMMIT');
+            if (manageTransaction) {
+                await pgClient.query('COMMIT');
+            }
             return result;
 
         } catch (error) {
-            await pgClient.query('ROLLBACK');
+            if (manageTransaction) {
+                await pgClient.query('ROLLBACK');
+            }
             throw error;
         } finally {
-            pgClient.release();
+            if (manageTransaction) {
+                pgClient.release();
+            }
         }
     }
 
     /**
      * Confirmar recolección física (marca como retirado)
      */
-    async confirmCollection(boteId, recolectorId) {
+    async confirmCollection(boteId, recolectorId, options = {}) {
         return this.changeStatus(
             boteId,
             BinStatus.RETIRADO,
             recolectorId,
-            'Recolección física confirmada por recolector'
+            'Recolección física confirmada por recolector',
+            options
         );
     }
 
     /**
      * Reactivar bote (después de reasignación)
      */
-    async reactivateBin(boteId, administradorId) {
+    async reactivateBin(boteId, administradorId, options = {}) {
         return this.changeStatus(
             boteId,
             BinStatus.ACTIVO,
             administradorId,
-            'Bote reasignado y reactivado'
+            'Bote reasignado y reactivado',
+            options
         );
     }
 

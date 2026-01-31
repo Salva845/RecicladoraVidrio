@@ -488,37 +488,6 @@ CREATE TRIGGER update_reportes_updated_at BEFORE UPDATE ON reportes
 CREATE TRIGGER update_rutas_updated_at BEFORE UPDATE ON rutas
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
--- Función para registrar cambios de estado en historial
-CREATE OR REPLACE FUNCTION log_bin_status_change()
-RETURNS TRIGGER AS $$
-BEGIN
-    IF OLD.status IS DISTINCT FROM NEW.status THEN
-        INSERT INTO historial_estados_bote (
-            bote_id,
-            estado_anterior,
-            estado_nuevo,
-            porcentaje_llenado,
-            motivo
-        ) VALUES (
-            NEW.id,
-            OLD.status,
-            NEW.status,
-            NEW.ultimo_porcentaje,
-            CASE 
-                WHEN NEW.status = 'retirado' THEN 'Recolección física confirmada'
-                WHEN NEW.status = 'pendiente_retiro' THEN 'Solicitud de retiro aprobada'
-                WHEN NEW.status = 'activo' THEN 'Bote reasignado o reactivado'
-                ELSE 'Cambio de estado'
-            END
-        );
-    END IF;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER log_bote_status_changes AFTER UPDATE ON botes
-    FOR EACH ROW EXECUTE FUNCTION log_bin_status_change();
-
 -- Función para actualizar contadores de ruta
 CREATE OR REPLACE FUNCTION update_route_counters()
 RETURNS TRIGGER AS $$
